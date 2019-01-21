@@ -1,0 +1,28 @@
+<div id="tool-thematiclayers">
+	<div id="toc-thematiclayers" class="m-toc-thematiclayers">
+		{{#gt groups.length 0}} {{#each groups}}
+		<div id="tocGroup_{{id}}" data-id="{{id}}" class="toc-item-group">
+			<div class="toc-item-group-header">
+				<div class="layer-group-name">
+					<button data-id="{{id}}" class="m-accion-thematiclayers-collapse {{#if collapsed}}g-cartografia-flecha-abajo2{{else}}g-cartografia-flecha-arriba2{{/if}}"
+					 title="Lista de capas"></button>
+					<span>{{title}}</span>
+				</div>
+				<!-- <div class="layer-group-button">
+					<button data-id="{{id}}" class="m-accion-thematiclayers-load-group {{#if activated}}g-cartografia-cancelar2{{else}}g-cartografia-mas2{{/if}}"
+					 title="{{#if activated}}Eliminar todas las capas del grupo{{else}}Añadir todas las capas del grupo{{/if}}"></button>
+				</div> -->
+			</div>
+			<div id="optionsTocGroup_{{id}}" class="toc-item-group-options{{#if collapsed}} dNone{{/if}}">
+				{{#gt overlays.length 0}} {{#each overlays}}
+				<div class="toc-item-group-overlay">
+					<input id="{{@index}}-{{id}}" class="m-accion-thematiclayers-load" type="checkbox" data-id="{{id}}" value="{{id}}" title="Añadir/Eliminar capa"
+					 {{#if load}}checked{{/if}}>
+					<label for="{{@index}}-{{id}}">{{title}}</label>
+				</div>
+				{{/each}} {{/gt}}
+			</div>
+		</div>
+		{{/each}} {{/gt}}
+	</div>
+</div>

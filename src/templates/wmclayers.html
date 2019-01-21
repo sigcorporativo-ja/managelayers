@@ -1,0 +1,30 @@
+<div id="tool-wmclayers">
+	<div id="toc-wmclayers" class="m-toc-wmclayers">
+		{{#gt wmcLayers.length 0}}
+		<div class="toc-item-group-header">
+			<div class="layer-group-name">
+				<span>Capas WMC: {{name}}</span>
+			</div>
+			<div class="layer-group-button">
+				<!-- <button data-id="{{id}}" class="m-accion-thematiclayers-load-group {{#if activated}}g-cartografia-cancelar2{{else}}g-cartografia-mas2{{/if}}"
+				 title="{{#if activated}}Eliminar todas las capas del grupo{{else}}Añadir todas las capas del grupo{{/if}}"></button> -->
+				<button class="m-accion-wmclayers-load-group g-cartografia-mas2" title="Añadir todas las capas"></button>
+			</div>
+		</div>
+		<!-- <div class="title">
+			<span>Capas WMC: {{name}}</span>
+			<button class="m-accion-wmclayers-load-group g-cartografia-mas2" title="Añadir todas las capas"></button>
+		</div> -->
+		{{#each wmcLayers}}
+		<div id="wmclayer_{{id}}" class="toc-item-layer">
+			<input id="{{@index}}-{{id}}" class="m-accion-wmclayers-load" type="checkbox" data-id="{{id}}" value="{{id}}" {{#if load}}checked{{/if}}
+			 title="Añadir/Eliminar capa">
+			<label for="{{@index}}-{{id}}">{{title}}</label>
+		</div>
+		{{/each}} {{else}}
+		<div class="info">
+			<span>No se ha añadido ninguna capa WMC</span>
+		</div>
+		{{/gt}}
+	</div>
+</div>

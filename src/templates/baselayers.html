@@ -1,0 +1,19 @@
+<div id="tool-baselayers">
+	<div id="toc-baselayers" class="m-toc-baselayers">
+		{{#if baseMapBlanco}}
+		<div id="{{baseMapBlanco.id}}" data-id="{{baseMapBlanco.id}}" class="box m-accion-baselayers-load {{#if activo}} baseActivo{{/if}}">
+			<img data-id="{{baseMapBlanco.id}}" class="m-accion-baselayers-load">
+			<div class="caption simple-caption">
+				<h5 data-id="{{baseMapBlanco.id}}" class="m-accion-baselayers-load">Fondo Blanco</h5>
+			</div>
+		</div>
+		{{/if}} {{#gt baseLayers.length 0}} {{#each baseLayers}}
+		<div id="{{id}}" class="box{{#if activo}} baseActivo{{/if}}">
+			<img data-id="{{id}}" class="m-accion-baselayers-load" src="{{img}}" alt="{{descripcion}}">
+			<div class="caption simple-caption">
+				<h5 data-id="{{id}}" class="m-accion-baselayers-load">{{title}}</h5>
+			</div>
+		</div>
+		{{/each}} {{/gt}}
+	</div>
+</div>
