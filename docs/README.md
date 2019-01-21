@@ -6,15 +6,15 @@
 
  Plugin de [Mapea](https://github.com/sigcorporativo-ja/Mapea4) para la gestión de capas de forma avanzada, permitiendo su ordenación, eliminación, trasparencia, etc. También incluye una sección de mapas de fondo y otra de capas favoritas.
  
- ![Imagen](./images/toc1.png)
+ ![Imagen](./images/toc1.PNG)
 
  Mediante configuración del plugin, o leyéndolo del WMC, pueden establecerse una serie de mapas base que se mostrarán de la siguiente manera.   
 
- ![Imagen](./images/toc_mapabase.png)
+ ![Imagen](./images/toc_mapabase.PNG)
 
  También pueden predefinirse capas, así como su agrupación, que estáran disponibles para el usuario a través de la pestaña de "Favoritas"
 
- ![Imagen](./images/toc_favoritas.png)      
+ ![Imagen](./images/toc_favoritas.PNG)      
 
  
 ## Recursos y uso
