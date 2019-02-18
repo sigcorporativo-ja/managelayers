@@ -21,8 +21,8 @@ export default class ActiveLayersControl extends ManageLayersControl {
     /**
      * Name to identify url template
      * @const
-     * @type {string}
      * @public
+     * @type {string}
      * @api stable
      */
     static get TEMPLATE() {
@@ -78,21 +78,6 @@ export default class ActiveLayersControl extends ManageLayersControl {
         content.addEventListener('input', (evt) => this.clickLayerSlider(evt));
     }
 
-    selectText(element) {
-        let doc = document;
-        if (doc.body.createTextRange) {
-            let range = doc.body.createTextRange();
-            range.moveToElementText(element);
-            range.select();
-        } else if (window.getSelection) {
-            let selection = window.getSelection();
-            let range = doc.createRange();
-            range.selectNodeContents(element);
-            selection.removeAllRanges();
-            selection.addRange(range);
-        }
-    }
-
     clickLayerSlider(evt) {
         evt = (evt || window.event);
         if (!M.utils.isNullOrEmpty(evt.target)) {
@@ -136,17 +121,22 @@ export default class ActiveLayersControl extends ManageLayersControl {
                 else if (itemTarget.classList.contains('m-accion-activelayers-rename')) {
                     //Establecer titulo como editable
                     let titleText = this.getQuerySelectorScapeCSS(ctolContainer, '#textTitleLayer_', id);
-                    titleText.contentEditable = 'true';
-                    titleText.focus();
-                    this.selectText(titleText);
+                    let input = document.createElement("input");
+                    input.type = "text";
+                    input.value = titleText.innerText;
+                    titleText.innerText = "";
+                    titleText.appendChild(input);
+                    input.addEventListener('focus', function () { this.select(); });
+                    input.focus();
                     let _event_blur = (evt) => {
-                        //Desactivar edicioremoveItemLayersn y almacenar cambios
-                        titleText.contentEditable = 'false';
-                        layer.legend = titleText.innerHTML;
-                        titleText.removeEventListener('blur', (evt) => _event_blur(evt));
+                        //Desactivar edicion y almacenar cambios
+                        titleText.innerHTML = input.value;
+                        layer.legend = input.value;
+                        input.removeEventListener('blur', (evt) => _event_blur(evt));
+                        input = null;
                     };
                     //Procesar cambios
-                    titleText.addEventListener('blur', (evt) => _event_blur(evt));
+                    input.addEventListener('blur', (evt) => _event_blur(evt));
                 }
                 // Activar/Desactivar
                 else if (itemTarget.classList.contains('m-accion-activelayers-activate')) {
@@ -347,7 +337,8 @@ export default class ActiveLayersControl extends ManageLayersControl {
                 'opacity': layer.getOpacity(),
                 'opacityPer': layer.getOpacity() * 100,
                 'styles': [],
-                'selectedStyle': '',
+                'canEditName': (layer.options.origen != 'Inicial' && layer.options.origen != 'Tematica'),
+                'canRemove': layer.options.origen != 'Inicial'
             };
             // Inicializamos el array de promises para lanzar el sucess desde un promise.all
             let promises = [];

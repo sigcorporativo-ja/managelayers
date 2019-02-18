@@ -184,7 +184,7 @@ export class ActiveLayersControl extends M.impl.Control {
     //setTimeout(() => this.renderPanel());
   }
 
-  renderPanel() {
+  renderPanel(evt) {
     //TODO: Tambien se podria obtener el control apartir del mapa con el nombre del control
     this.facadeCtrol_.renderPanel();
   }

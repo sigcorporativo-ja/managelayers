@@ -78,7 +78,14 @@ div.m-panel.m-managelayers.collapsed {
     left: -40px;
 }
 
-
+.m-areas>div.m-area>div.m-panel.m-managelayers>button.m-panel-btn {
+    background-color: #00897B;
+    position: absolute;
+    left: initial;
+    color: #fff;
+    z-index: 999999;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, .2), 0 -1px 0 rgba(0, 0, 0, .02);
+}
 
 /* .m-areas>div.m-area>div.m-panel.m-managelayers>div.m-panel-controls {
     max-height: 80vh;
@@ -200,8 +207,14 @@ div.m-panel.m-managelayers.collapsed {
     align-self: auto;
     text-overflow: ellipsis;
     overflow: hidden;
-    white-space: nowrap;
+    /* white-space: nowrap; */
     font-weight: bold;
+}
+
+.m-toc-activelayers .toc-item-layer .toc-item-layer-header .m-area-title div.m-title>input {
+    border: 2px solid rgba(255, 152, 0, 0.6);
+    margin: 0;
+    padding: 3px;
 }
 
 .m-toc-activelayers .toc-item-layer .toc-item-layer-header .m-area-title div.m-button {
@@ -567,7 +580,6 @@ div#toc-baselayers {
     z-index: 999999;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2), 0 -1px 0px rgba(0, 0, 0, 0.02);
 }
-
 
 .m-areas>div.m-area>div.m-panel.m-managelayers.opened>button.m-panel-btn {
     left: -40px;

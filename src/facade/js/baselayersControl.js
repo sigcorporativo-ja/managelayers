@@ -148,9 +148,9 @@ export default class BaseLayersControl extends ManageLayersControl {
         if (M.utils.isNullOrEmpty(descripcion))
             descripcion = 'Imagen mapa base - ' + title;
         let urlImg = baseMap.img;
-        let activo = (this.mapaActivo === layer.id);
+        let activo = (this.mapaActivo === baseMap.id);
         return {
-            'id': layer.id,
+            'id': baseMap.id,
             'title': title,
             'descripcion': descripcion,
             'img': urlImg,
@@ -161,6 +161,11 @@ export default class BaseLayersControl extends ManageLayersControl {
     addEvents(html) {
         let content = html.querySelector(this.getSelectorContainer_());
         content.addEventListener("click", (evt) => this.clickBaseLayer(evt));
+        this.map_.on(M.evt.CHANGE_WMC, () => {
+            this.mapaActivo = null;
+            this.baseMaps_ = this.loadConfigInicial();
+            this.renderPanel();
+        });
     }
 
     clickBaseLayer(evt) {
@@ -170,6 +175,7 @@ export default class BaseLayersControl extends ManageLayersControl {
             //Cambio de mapa base
             if (itemTarget.classList.contains('m-accion-baselayers-load')) {
                 evt.stopPropagation();
+
                 let id = itemTarget.getAttribute('data-id');
                 if (!M.utils.isNullOrEmpty(id)) {
                     //Obtenemos el elemento activo
@@ -187,8 +193,9 @@ export default class BaseLayersControl extends ManageLayersControl {
                             let selectMap = this.findItemByProperty(this.baseMaps_, 'id', id);
                             if (selectMap && selectMap.layer) {
                                 // this.addLayers(selectMap.layer);
-                                //Hack a mapea, que pone invisible la capa si ya hay una capa base activa
-                                selectMap.layer.setVisible(true);
+                                //Hack a mapea, si se usa directamente selectMap.layer.setVisible
+                                //pone invisible la capa si ya hay una capa base activa y utiliza el updateResolutionsFromBaseLayers que reinicia los estilos
+                                selectMap.layer.getImpl().getOL3Layer().setVisible(true);
                             }
                         } catch (error) {
                             console.log(error);
@@ -199,7 +206,7 @@ export default class BaseLayersControl extends ManageLayersControl {
                             if (activeId) {
                                 activeItem.classList.toggle('baseActivo');
                                 let activeMap = this.findItemByProperty(this.baseMaps_, 'id', activeId);
-                                activeMap.layer.setVisible(false);
+                                activeMap.layer.getImpl().getOL3Layer().setVisible(false);
                             }
                         } catch (error) {
                             console.log(error);
@@ -223,17 +230,23 @@ export default class BaseLayersControl extends ManageLayersControl {
         });
         if (loadedBaseMaps.length) {
             for (let i = 0; i < loadedBaseMaps.length; i++) {
-                // Pongo como activa la primera y elimino del mapa las otras
-                if (i == 0) {
-                    loadedBaseMaps[0].activo = true;
+                // Pongo como activa la que venga como visible
+                if (loadedBaseMaps[i].layer.isVisible() && !bmapLoaded) {
+                    loadedBaseMaps[i].activo = true;
                     bmapLoaded = true;
                 } else {
-                    loadedBaseMaps[i].layer.setVisible(false);
+                    loadedBaseMaps[i].activo = false;
                 }
             }
             // Elimino cualquier otra capa activa que viniera por configuración
             for (let bl of baseMaps) {
                 bl.activo = false;
+            }
+            // Si no venía ninguna como activa, marco la primera de la lista
+            if (!bmapLoaded) {
+                loadedBaseMaps[0].layer.setVisible(true);
+                loadedBaseMaps[0].activo = true;
+                bmapLoaded = true;
             }
             baseMaps = [...baseMaps, ...loadedBaseMaps];
         }
