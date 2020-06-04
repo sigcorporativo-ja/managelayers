@@ -90,7 +90,7 @@ export default class MapeaCoreExtension {
                         this.getCapabilities().then((info) => {
                             let infoLayer = null;
                             if (this instanceof M.impl.layer.WMTS) {
-
+                                // Nada
                             } else {
                                 infoLayer = info.getInfoCapabilities(this.name);
                             }

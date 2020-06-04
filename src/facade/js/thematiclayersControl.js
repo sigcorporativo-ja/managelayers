@@ -1,7 +1,10 @@
-import namespace from 'mapea-util/decorator';
-import ManageLayersControl from './managelayersControl.js';
+/**
+ * @module M/control/ThematicLayersControl
+ */
+import ManageLayersImplControl from 'impl/managelayerscontrol';
+import ManageLayersControl from './managelayerscontrol.js';
+import template from 'templates/thematiclayers';
 
-@namespace("M.control")
 export default class ThematicLayersControl extends ManageLayersControl {
 
 
@@ -24,7 +27,7 @@ export default class ThematicLayersControl extends ManageLayersControl {
      * @api stable
      */
     static get TEMPLATE() {
-        return 'thematiclayers.html';
+        return template;
     }
 
     /**
@@ -39,7 +42,7 @@ export default class ThematicLayersControl extends ManageLayersControl {
     constructor(params, options) {
 
         // 2. implementation of this control
-        let impl = new M.impl.control.ManageLayersControl(params);
+        let impl = new ManageLayersImplControl(params);
 
         let opt_ = {
             controlName: ThematicLayersControl.NAME,
@@ -63,13 +66,7 @@ export default class ThematicLayersControl extends ManageLayersControl {
 
         //Establecemos configuracion inicial
         this.loadConfigInicial();
-
-
-
     }
-
-
-
 
     /**
      * This function checks if an object is equals
@@ -95,12 +92,12 @@ export default class ThematicLayersControl extends ManageLayersControl {
     }
 
     renderPanel() {
-        M.template.compile(ThematicLayersControl.TEMPLATE, {
+        let html = M.template.compileSync(ThematicLayersControl.TEMPLATE, {
             //'jsonp' : true,
             'vars': this.getTemplateVariables_()
-        }).then((html) => {
-            this.getControlContainer_().innerHTML = html.innerHTML;
         });
+            this.getControlContainer_().innerHTML = html.innerHTML;
+
     }
 
     addEvents(html) {

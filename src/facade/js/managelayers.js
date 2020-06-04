@@ -1,14 +1,16 @@
-import namespace from 'mapea-util/decorator';
+/**
+ * @module M/plugin/ManageLayers
+ */
+import 'assets/css/managelayers';
+import api from '../../api.json';
 import MapeaCoreExtension from './_mapea_core_extension.js';
 import ActiveLayersControl from './activelayersControl.js';
 import BaseLayersControl from './baselayersControl.js';
 import ThematicLayersControl from './thematiclayersControl.js';
-import WMCLayersControl from './wmclayersControl.js';
-import css from 'assets/css/managelayers.css';
-import ManageLayersControl from './managelayersControl.js';
+import template from 'templates/template_managelayers_toolbar';
 
-@namespace("M.plugin")
-class ManageLayers extends M.Plugin {
+
+export default class ManageLayers extends M.Plugin {
 
 
   /**
@@ -30,7 +32,7 @@ class ManageLayers extends M.Plugin {
    * @api stable
    */
   static get TEMPLATE() {
-    return 'template_managelayers_toolbar.html';
+    return template;
   }
 
   /**
@@ -46,7 +48,7 @@ class ManageLayers extends M.Plugin {
   constructor(parameters) {
 
     super();
-    this.name = M.plugin.ManageLayers.NAME;
+    this.name = ManageLayers.NAME;
     /**
      * Facade of the map
      * @private
@@ -73,6 +75,13 @@ class ManageLayers extends M.Plugin {
      * @type {object}
      */
     this.params_ = parameters.params || {};
+
+    /**
+     * Metadata from api.json
+     * @private
+     * @type {Object}
+     */
+    this.metadata_ = api.metadata;
 
     /**
      * Options of the controls
@@ -109,8 +118,7 @@ class ManageLayers extends M.Plugin {
     //Asignar el mapa
     this.map_ = map;
     //Creamos toolbar plugin: contiene todos los controles del plugin
-    let view = this.createView(map);
-    view.then((html) => {
+    let html = this.createView(map);
       //Configuracion de la toolbar
       this.toolbar_ = {
         target: html,
@@ -127,8 +135,8 @@ class ManageLayers extends M.Plugin {
             "jsonp": false
           }).then((response) => {
             if (response.error === false) {
-              let data = response.text;
-              let results = JSON.parse(data);
+              //let data = response.text;
+              //let results = JSON.parse(data);
             } else {
               M.dialog.error("Se ha producido un error al cargar la configuración de metadatos", "Configuración metadatos");
             }
@@ -139,7 +147,6 @@ class ManageLayers extends M.Plugin {
         } else //Cargamos controles
           this.initControls();
       });
-    });
   }
 
   getConfigControl(name) {
@@ -148,34 +155,30 @@ class ManageLayers extends M.Plugin {
     config.options = config.options || {};
     config.options.toolbar = this.toolbar_;
     return config;
-  };
+  }
 
   initControls() {
     let ctrol = null;
     let config = null;
 
-
-
-
-
     //Capas activas
     config = this.getConfigControl('activeLayers');
-    ctrol = new M.control.ActiveLayersControl(config.params, config.options);
+    ctrol = new ActiveLayersControl(config.params, config.options);
     this.addControlToPlugin_(ctrol);
 
     //Mapas base
     config = this.getConfigControl('baseLayers');
-    ctrol = new M.control.BaseLayersControl(config.params, config.options);
+    ctrol = new BaseLayersControl(config.params, config.options);
     this.addControlToPlugin_(ctrol);
 
     //Capas tematicas(favoritas)
     config = this.getConfigControl('thematicLayers');
-    ctrol = new M.control.ThematicLayersControl(config.params, config.options);
+    ctrol = new ThematicLayersControl(config.params, config.options);
     this.addControlToPlugin_(ctrol);
 
     /* //Capas WMC
     config = this.getConfigControl('wmcLayers');
-    ctrol = new M.control.WMCLayersControl(config.params, config.options);
+    ctrol = WMCLayersControl(config.params, config.options);
     this.addControlToPlugin_(ctrol); */
 
 
@@ -187,13 +190,33 @@ class ManageLayers extends M.Plugin {
       this.fire(M.evt.ADDED_TO_MAP)
     );
     this.map_.addPanels(this.panel_);
-  };
+  }
 
   createView(map) {
-    return M.template.compile(ManageLayers.TEMPLATE, {
+    if (!M.template.compileSync) { // JGL: retrocompatibilidad Mapea4
+      M.template.compileSync = (string, options) => {
+        let templateCompiled;
+        let templateVars = {};
+        let parseToHtml;
+        if (!M.utils.isUndefined(options)) {
+          templateVars = M.utils.extends(templateVars, options.vars);
+          parseToHtml = options.parseToHtml;
+        }
+        const templateFn = Handlebars.compile(string);
+        const htmlText = templateFn(templateVars);
+        if (parseToHtml !== false) {
+          templateCompiled = M.utils.stringToHtml(htmlText);
+        } else {
+          templateCompiled = htmlText;
+        }
+        return templateCompiled;
+      };
+    }
+
+    return M.template.compileSync(ManageLayers.TEMPLATE, {
       //'jsonp' : true
     });
-  };
+  }
 
 
   addControlToPlugin_(ctrol) {
@@ -203,7 +226,7 @@ class ManageLayers extends M.Plugin {
     });
     //Annadir control
     this.controls_.push(ctrol);
-  };
+  }
 
   getPanel_() {
     //Comprobar si el panel existe
@@ -234,7 +257,7 @@ class ManageLayers extends M.Plugin {
     }
 
     return panel;
-  };
+  }
 
   /**
    * Control panel configuration options
@@ -256,12 +279,12 @@ class ManageLayers extends M.Plugin {
       tooltip: ((!M.utils.isNullOrEmpty(opt_.tooltip)) ? opt_.tooltip : 'Gestor de capas')
     };
     return panelOptions_;
-  };
+  }
 
 
   getControls() {
     return this.controls_;
-  };
+  }
 
   /**
    * This function destroys this plugin
@@ -278,7 +301,7 @@ class ManageLayers extends M.Plugin {
     this.params_ = null;
     this.options_ = null;
     this.name = null;
-  };
+  }
 
   /**
    * This function compare if pluging recieved by param is instance of   this
@@ -294,5 +317,16 @@ class ManageLayers extends M.Plugin {
       equals = true;
     }
     return equals;
-  };
+  }
+
+  /**
+   * This function gets metadata plugin
+   *
+   * @public
+   * @function
+   * @api stable
+   */
+  getMetadata(){
+    return this.metadata_;
+  }
 }

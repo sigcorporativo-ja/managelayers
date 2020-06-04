@@ -1,9 +1,11 @@
-import namespace from 'mapea-util/decorator';
-import ManageLayersControl from './managelayersControl.js';
+/**
+ * @module M/control/ActiveLayersControl
+ */
+import ManageLayersControl from './managelayerscontrol.js';
 import ActiveLayersImplControl from 'impl/activelayersControl';
 import Sortable from './_externs_html.sortable.min.js';
+import template from 'templates/activelayers';
 
-@namespace("M.control")
 export default class ActiveLayersControl extends ManageLayersControl {
 
 
@@ -26,7 +28,7 @@ export default class ActiveLayersControl extends ManageLayersControl {
      * @api stable
      */
     static get TEMPLATE() {
-        return 'activelayers.html';
+        return template;
     }
 
     /**
@@ -40,7 +42,7 @@ export default class ActiveLayersControl extends ManageLayersControl {
      */
     constructor(params, options) {
         // 1. checks if the implementation can create ActiveLayersControl
-        if (M.utils.isUndefined(M.impl.control.ActiveLayersControl)) {
+        if (M.utils.isUndefined(ActiveLayersImplControl)) {
             M.exception('La implementación usada no puede crear controles ActiveLayersControl');
         }
         // Parametros del control
@@ -52,7 +54,7 @@ export default class ActiveLayersControl extends ManageLayersControl {
         // Se annaden los parametros de control a las opciones
         options = M.utils.extend(opt_, options, true);
         // 2. implementation of this control
-        let impl = new M.impl.control.ActiveLayersControl(params);
+        let impl = new ActiveLayersImplControl(params);
 
         super(impl, params, options);
 
@@ -229,12 +231,12 @@ export default class ActiveLayersControl extends ManageLayersControl {
     renderPanel() {
         this.activateLoading();
         this.getTemplateVariables_().then((templateVariables) => {
-            M.template.compile(ActiveLayersControl.TEMPLATE, {
+            let html = M.template.compileSync(ActiveLayersControl.TEMPLATE, {
                 //'jsonp' : true,
                 'vars': {
                     'overlayLayers': templateVariables
                 }
-            }).then((html) => {
+            });
                 //Antes de eliminar lista anterior sortable de capas activas
                 if (this.sortableList) {
                     this.sortableList.destroy();
@@ -266,7 +268,7 @@ export default class ActiveLayersControl extends ManageLayersControl {
                     action.addEventListener('click', this.boundClickLayer_);
                 });
                 this.deactivateLoading();
-            });
+
         });
 
     }

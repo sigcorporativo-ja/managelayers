@@ -1,35 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
+import ManageLayers from 'facade/managelayers';
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="mapea" content="yes">
-    <title>ManageLayers Production TEST</title>
-    <link href="http://mapea4-sigc.juntadeandalucia.es/assets/css/mapea-5.1.0.ol.min.css" rel="stylesheet" />
-    <link href="../dist/managelayers.ol.min.css" rel="stylesheet" />
-    <style rel="stylesheet">
-        html,
-        body {
-            margin: 0;
-            padding: 0;
-            height: 100%;
-            overflow: hidden;
-        }
-    </style>
-
-</head>
-
-<body>
-    <div id="mapjs" class="container"></div>
-    <script type="text/javascript" src="http://mapea4-sigc.juntadeandalucia.es/js/mapea-5.1.0.ol.min.js"></script>
-    <script type="text/javascript" src="http://mapea4-sigc.juntadeandalucia.es/js/configuration-5.1.0.js"></script>
-    <script type="text/javascript" src="../dist/managelayers.ol.min.js"></script>
-    <script type="text/javascript">
-       const map = M.map({
-	  	container: 'mapjs',
-	});
+const map = M.map({
+  container: 'mapjs',
+});
 
 /** Plugin gestor de capas **/
     var configGroups = [];
@@ -233,10 +206,6 @@
         }
     };
 
-const mp = new M.plugin.ManageLayers(paramsPlugin);
+const mp = new ManageLayers(paramsPlugin);
 
 map.addPlugin(mp);
-    </script>
-</body>
-
-</html>

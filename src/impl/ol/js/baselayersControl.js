@@ -1,7 +1,8 @@
-import namespace from 'mapea-util/decorator';
+/**
+ * @module M/impl/control/BaseLayersControl
+ */
 
-@namespace("M.impl.control")
-export class BaseLayersControl extends M.impl.Control {
+export default class BaseLayersControl extends M.impl.Control {
   /**
    * @classdesc
    * Main constructor of the BaseLayersControl.
@@ -82,6 +83,6 @@ export class BaseLayersControl extends M.impl.Control {
     this.facadeMap_.getMapImpl().removeControl(this);
     this.facadeMap_ = null;
     this.element = null;
-  };
+  }
 
 }

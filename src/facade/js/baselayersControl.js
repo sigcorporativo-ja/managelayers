@@ -1,8 +1,10 @@
-import namespace from 'mapea-util/decorator';
+/**
+ * @module M/plugin/BaseLayersControl
+ */
+import ManageLayersControl from './managelayerscontrol.js';
 import BaseLayersImplControl from 'impl/baselayersControl';
-import ManageLayersControl from './managelayersControl.js';
+import template from 'templates/baselayers';
 
-@namespace("M.control")
 export default class BaseLayersControl extends ManageLayersControl {
 
 
@@ -25,7 +27,7 @@ export default class BaseLayersControl extends ManageLayersControl {
      * @api stable
      */
     static get TEMPLATE() {
-        return 'baselayers.html';
+        return template;
     }
 
     static get BASEMAP_BLANCO() {
@@ -49,7 +51,7 @@ export default class BaseLayersControl extends ManageLayersControl {
      */
     constructor(params, options) {
         // 1. checks if the implementation can create BaseLayersControl
-        if (M.utils.isUndefined(M.impl.control.BaseLayersControl)) {
+        if (M.utils.isUndefined(BaseLayersImplControl)) {
             M.exception('La implementación usada no puede crear controles BaseLayersControl');
         }
         let opt_ = {
@@ -60,7 +62,7 @@ export default class BaseLayersControl extends ManageLayersControl {
         // Se annaden los parametros de control a las opciones
         options = M.utils.extend(opt_, options, true);
         // 2. implementation of this control
-        let impl = new M.impl.control.BaseLayersControl();
+        let impl = new BaseLayersImplControl();
 
         super(impl, params, options);
 
@@ -97,17 +99,17 @@ export default class BaseLayersControl extends ManageLayersControl {
     renderPanel() {
         let tempVars= this.getTemplateVariables_();
 
-        M.template.compile(BaseLayersControl.TEMPLATE, {
+        let html = M.template.compileSync(BaseLayersControl.TEMPLATE, {
             //'jsonp' : true,
             'vars': tempVars
-        }).then((html) => {
+        });
             this.getControlContainer_().innerHTML = html.innerHTML;
             /*           //Establecer mapa activo
                       if (!M.utils.isNullOrEmpty(this.mapaActivo)) {
                           let selectItem = this.getControlContainer_().querySelector('[data-id=' + this.mapaActivo + ']');
                           selectItem.click();
                       } */
-        });
+
     }
 
     /**
@@ -198,7 +200,7 @@ export default class BaseLayersControl extends ManageLayersControl {
                                 selectMap.layer.getImpl().getOL3Layer().setVisible(true);
                             }
                         } catch (error) {
-                            console.log(error);
+                            //console.log(error);
                         }
 
                         try {
@@ -209,7 +211,7 @@ export default class BaseLayersControl extends ManageLayersControl {
                                 activeMap.layer.getImpl().getOL3Layer().setVisible(false);
                             }
                         } catch (error) {
-                            console.log(error);
+                            //console.log(error);
                         }
                     }
                 }

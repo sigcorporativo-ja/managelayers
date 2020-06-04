@@ -1,7 +1,7 @@
-import namespace from 'mapea-util/decorator';
-
-@namespace("M.impl.control")
-export class ActiveLayersControl extends M.impl.Control {
+/**
+ * @module M/impl/control/ActiveLayersControl
+ */
+export default class ActiveLayersControl extends M.impl.Control {
   /**
    * @classdesc
    * Main constructor of the ActiveLayersControl.

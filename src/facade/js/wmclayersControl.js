@@ -1,7 +1,10 @@
-import namespace from 'mapea-util/decorator';
-import ManageLayersControl from './managelayersControl.js';
+/**
+ * @module M/control/WMCLayersControl
+ */
+import ManageLayersControl from './managelayerscontrol.js';
+import ManageLayersImplControl from 'impl/managelayerscontrol';
+import template from 'templates/wmclayers';
 
-@namespace("M.control")
 export default class WMCLayersControl extends ManageLayersControl {
 
 
@@ -24,7 +27,7 @@ export default class WMCLayersControl extends ManageLayersControl {
      * @api stable
      */
     static get TEMPLATE() {
-        return 'wmclayers.html';
+        return template;
     }
 
     /**
@@ -39,7 +42,7 @@ export default class WMCLayersControl extends ManageLayersControl {
     constructor(params, options) {
 
         // 2. implementation of this control
-        let impl = new M.impl.control.ManageLayersControl(params);
+        let impl = new ManageLayersImplControl(params);
 
         let opt_ = {
             controlName: WMCLayersControl.NAME,
@@ -92,12 +95,12 @@ export default class WMCLayersControl extends ManageLayersControl {
     }
 
     renderPanel() {
-        M.template.compile(WMCLayersControl.TEMPLATE, {
+        let html = M.template.compileSync(WMCLayersControl.TEMPLATE, {
             //'jsonp' : true,
             'vars': this.getTemplateVariables_()
-        }).then((html) => {
-            this.getControlContainer_().innerHTML = html.innerHTML;
         });
+            this.getControlContainer_().innerHTML = html.innerHTML;
+
     }
 
     addEvents(html) {
