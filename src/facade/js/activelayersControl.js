@@ -89,7 +89,7 @@ export default class ActiveLayersControl extends ManageLayersControl {
             if (!M.utils.isNullOrEmpty(id)) {
                 let layer = this.findLayerById(id);
                 if (itemTarget.classList.contains('m-accion-activelayers-transparency')) {
-                    layer.setOpacity(itemTarget.value);
+                    layer.setOpacity(parseFloat(itemTarget.value));
                     itemTarget.nextElementSibling.innerHTML = itemTarget.value * 100 + '%';
                 }
             }
