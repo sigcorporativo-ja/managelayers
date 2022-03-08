@@ -127,7 +127,7 @@ export default class ManageLayers extends M.Plugin {
         selectorContainer: '.m-toolbar-containers'
       };
       //Inicializar controles en toolbar cuando este cargado el mapa
-      this.map_.on(M.evt.COMPLETED, () => {
+      this.map_.once(M.evt.COMPLETED, () => {
         //Cargar si se indica configuracion para metadatos
         //M.remote.get (url, data, options)
         if (!M.utils.isNullOrEmpty(this.params_.metadata)) {
