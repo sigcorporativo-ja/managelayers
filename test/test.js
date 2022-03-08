@@ -2,6 +2,7 @@ import ManageLayers from 'facade/managelayers';
 
 const map = M.map({
   container: 'mapjs',
+  wmcfile: 'https://www.ideandalucia.es/visor/wmc/mapa_base.xml'
 });
 
 /** Plugin gestor de capas **/
